@@ -8,5 +8,4 @@ class HomeView(View):
 
 class ResultView(View):
     def get(self, request, *args, **kwargs):
-        print(request)
         return render(request, 'result.html', {})

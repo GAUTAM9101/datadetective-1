@@ -1,393 +1,153 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <!--<meta charset="utf-8">-->
+    <title>dataDetective</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""
+    />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script
+      src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+      crossorigin=""
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
 
-<head>
-  <!--<meta charset="utf-8">-->
-  <title>dataDetective</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    crossorigin="" />
-  <!-- Make sure you put this AFTER Leaflet's CSS -->
-  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-    crossorigin=""></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-  <style>
-    canvas {
-      -moz-user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-    }
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <img
+            src="{% static 'assets/logo.png' %}"
+            alt="Logo"
+            width="200px"
+            height="50px"
+          />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-    /* css to customize Leaflet default styles  */
-    .popupCustom .leaflet-popup-tip {
-      display: none;
-    }
-
-    .popupCustom .leaflet-popup-content-wrapper {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      background: #e0e0e0;
-      color: #234c5e;
-    }
-  </style>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-  <script>
-    function getDate() {
-      var today = new Date();
-      var dd = today.getDate();
-      var mm = today.getMonth() + 1; //January is 0!
-      var yyyy = today.getFullYear();
-
-      if (dd < 10) {
-        dd = '0' + dd
-      }
-
-      if (mm < 10) {
-        mm = '0' + mm
-      }
-
-      today = yyyy + '-' + mm + '-' + dd;
-      return today
-    }
-
-  </script>
-</head>
-
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="/">
-        <img src="{% static 'assets/logo.png' %}" alt="Logo" width="50%" height="50%">
-      </a>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto ">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">pirates@datadetective.com </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container mt-5">
-    <p style="font-size:20px;">Welcome to dataDetective Portal!</p>
-    <form class="form" action="result/" method="GET">
-      <button type="submit" value="search" class="btn btn-outline-primary" style="float: right"><i class="fa fa-search"
-          aria-hidden="true"></i></button>
-      <div style="overflow: hidden; padding-right: .5em;">
-        <input class="form-control bd-highlight" name="location" id="searchbar" placeholder="Search City..."
-          aria-label="Search">
-      </div>
-    </form>
-  </div>
-  <div class="container mt-5">
-    <div class="card">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-          <p style="font-weight: 400; font-size: 20px;">Crime Activity Map</p>
-          <!-- <button type="button" class="btn btn-outline-primary">7 August, 2020 <i class="fa fa-calendar" aria-hidden="true"></i></button> -->
-          <form action="#">
-            <input name="dt" type="date" id="calender" onchange="handler(event);">
-          </form>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">pirates@datadetective.com </a>
+            </li>
+          </ul>
         </div>
-      </nav>
-      <div id="mapid" style="width: 100%; height: 30rem; z-index: 0;"></div>
-      <div class="container" id="chartBox" style="visibility: hidden;">
-        <div class="card p-2">
-          <div id="canvas-holder" style="width:100%; height: auto;">
-            <canvas id="chart-area"></canvas>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <h3>Welcome to dataDetective Portal!</h3>
+      <form class="form" action="result/" method="GET">
+        <button
+          type="submit"
+          value="search"
+          class="btn btn-outline-primary"
+          style="float: right"
+        >
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+        <div style="overflow: hidden; padding-right: 0.5em">
+          <input
+            class="form-control bd-highlight"
+            name="location"
+            id="searchbar"
+            placeholder="Search City..."
+            aria-label="Search"
+          />
+        </div>
+      </form>
+    </div>
+    <div class="container mt-5">
+      <div class="card">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container">
+            <p style="font-weight: 400; font-size: 20px">Crime Activity Map</p>
+            <form action="#">
+              <input
+                name="dt"
+                type="date"
+                id="calender"
+                onchange="handler(event);"
+              />
+            </form>
+          </div>
+        </nav>
+        <div id="mapid" style="width: 100%; height: 30rem; z-index: 0"></div>
+        <div class="container" id="chartBox" style="visibility: hidden">
+          <div class="card p-2">
+            <div id="canvas-holder" style="width: 100%; height: auto">
+              <canvas id="chart-area"></canvas>
+            </div>
           </div>
         </div>
+        <script
+          src="https://code.jquery.com/jquery-3.5.1.min.js"
+          integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+          crossorigin="anonymous"
+        ></script>
       </div>
-      <script>
-        var config = {
-          type: 'doughnut',
-          data: {
-            datasets: [{
-              hoverBorderWidth: 5,
-              borderColor: 'rgba(0, 0, 0, 0.1)',
-              data: [0],
-              backgroundColor: [
-                '#2E5BFF',
-                '#8C54FF',
-                '#FAD050',
-                '#00C1D4',
-              ],
-              label: 'crimes'
-            }],
-            labels: ['No DATA'],
-          },
-          options: {
-            responsive: true,
-            legend: {
-              position: 'right',
-              labels: {
-                fontSize: 12,
-                usePointStyle: true,
-                fontColor: '#20B2AA',
-              },
-            },
-            title: {
-              display: true,
-              text: `24H Crime Prediction for `, // ${location.toString()}
-              fontColor: '#20B2AA',
-            },
-            animation: {
-              animateScale: true,
-              animateRotate: true
-            }
-          }
-        };
-
-        window.onload = function () {
-          document.getElementById("calender").value = getDate();
-          var ctx = document.getElementById('chart-area').getContext('2d');
-          window.chart = new Chart(ctx, config);
-        }
-
-        let date
-        let today = getDate();
-
-        function handler(e) {
-          date = e.target.value
-        }
-
-
-        let morning_hours = [];
-        let morning_crimes = [];
-        let afternoon_hours = [];
-        let afternoon_crimes = [];
-        let evening_hours = [];
-        let evening_crimes = [];
-        let overnight_crimes = [];
-        let overnight_hours = [];
-
-        crime_labels = ['Larceny', 'Burglary', 'Assault', 'Robbery']
-
-        function displayData(json, location) {
-          let crimes = [];
-          let hours = [];
-
-          let forcast = json.forcast;
-          console.log(forcast)
-
-          const mode = (myArray) =>
-            myArray.reduce(
-              (a, b, i, arr) =>
-              (arr.filter(v => v === a).length >= arr.filter(v => v === b).length ? a : b),
-              null)
-
-          // For All Day
-          for (let i = 0; i < forcast.length; i++) {
-            crimes.push(forcast[i]["Crime"])
-          }
-          for (let i = 0; i < forcast.length; i++) {
-            hours.push(forcast[i]["Hour"])
-          }
-          // For Morning
-          for (let i = 5; i < 12; i++) {
-            morning_crimes.push(forcast[i]["Crime"])
-          }
-
-          // document.getElementById('morning').innerText = crime_labels[mode(morning_crimes)]
-          for (let i = 5; i < 12; i++) {
-            morning_hours.push(forcast[i]["Hour"])
-          }
-          // For Afternoon
-          for (let i = 12; i < 16; i++) {
-            afternoon_crimes.push(forcast[i]["Crime"])
-          }
-          // document.getElementById('afternoon').innerText = crime_labels[mode(afternoon_crimes)]
-          for (let i = 12; i < 16; i++) {
-            afternoon_hours.push(forcast[i]["Hour"])
-          }
-          // For Evening
-          for (let i = 16; i < 20; i++) {
-            evening_crimes.push(forcast[i]["Crime"])
-          }
-          // document.getElementById('evening').innerText = crime_labels[mode(evening_crimes)]
-          for (let i = 16; i < 20; i++) {
-            evening_hours.push(forcast[i]["Hour"])
-          }
-
-          // For Overnight
-          for (let i = 20; i < 23; i++) {
-            overnight_crimes.push(forcast[i]["Crime"])
-          }
-          for (let i = 20; i < 23; i++) {
-            overnight_hours.push(forcast[i]["Hour"])
-          }
-          for (let i = 0; i < 5; i++) {
-            overnight_crimes.push(forcast[i]["Crime"])
-          }
-          for (let i = 0; i < 5; i++) {
-            overnight_hours.push(forcast[i]["Hour"])
-          }
-          // document.getElementById('overnight').innerText = crime_labels[mode(overnight_crimes)]
-
-          updateChart(hours, crimes, location);
-        }
-
-        function xhrError() {
-          console.error(this.statusText);
-        }
-
-        function getPredictions(data) {
-          return new Promise(function (resolve, reject) {
-            var xhr = new XMLHttpRequest();
-            xhr.onerror = xhrError;
-            var url = "/api/v1/crime_classifier/predict?version=0.2";
-            xhr.open("POST", url, true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onload = function () {
-              var status = xhr.status;
-              if (status == 200) {
-                resolve(xhr.response);
-              } else {
-                reject(status);
-              }
-            };
-            xhr.send(data);
-          });
-
-        }
-
-        async function getData(location) {
-          latitude = location.lat;
-          longitude = location.lng;
-
-          var data = JSON.stringify({
-            "Date": date || getDate(),
-            "Lat": latitude,
-            "Long": longitude
-          });
-          console.log(data)
-          json = await getPredictions(data);
-          json = JSON.parse(json);
-          console.log(json)
-          displayData(json, location);
-
-        }
-
-        function updateChart(hours, crimes, location) {
-          Array.prototype.contains = function (v) {
-            for (var i = 0; i < this.length; i++) {
-              if (this[i] === v) return true;
-            }
-            return false;
-          };
-
-          Array.prototype.unique = function () {
-            var arr = [];
-            for (var i = 0; i < this.length; i++) {
-              if (!arr.contains(this[i])) {
-                arr.push(this[i]);
-              }
-            }
-            return arr;
-          }
-
-          var counts = {};
-
-          function count(arr) {
-            for (var i = 0; i < arr.length; i++) {
-              var num = arr[i];
-              counts[num] = counts[num] ? counts[num] + 1 : 1;
-            }
-          }
-          count(crimes);
-
-          data = [];
-
-          crimes.unique().forEach(element => {
-            data.push(counts[element])
-          });
-
-          label = [];
-          crimes.unique().forEach(element => {
-            label.push(crime_labels[element])
-          });
-
-          // config.data.datasets.forEach(function(dataset) {
-          //   dataset.data = getCrimes()
-          // });
-
-          // console.log(config.data.datasets[0].data)
-          config.data.datasets[0].data = data;
-          config.data.labels = label;
-          config.options.title.text = `24H Crime Prediction for ${location.toString()}`
-
-          window.chart.update();
-        }
-      </script>
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-      <script>
-        function handler(e) {
-          date = e.target.value
-        }
-
-        var mymap = L.map('mapid').setView([42.3145186, -71.1103698], 11);
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 20,
-          id: 'mapbox/dark-v10',
-          tileSize: 512,
-          zoomOffset: -1,
-          accessToken: 'pk.eyJ1Ijoiemtlc2FyYW5pIiwiYSI6ImNrZG9vMnVtNDFsMmsyc2w1bmE3Z2g1emcifQ.ftZN_U9my7qqZ7HVDR7LSQ'
-        }).addTo(mymap);
-
-        L.marker([42.3145186, -71.1103698]).addTo(mymap)
-          .bindPopup("<b>Boston, Massachusetts USA</b>").openPopup();
-
-        // L.circle([51.508, -0.11], 500, {
-        // 	color: 'red',
-        // 	fillColor: '#f03',
-        // 	fillOpacity: 0.5
-        // }).addTo(mymap).bindPopup("I am a circle.");
-
-        // L.polygon([
-        // 	[51.509, -0.08],
-        // 	[51.503, -0.06],
-        // 	[51.51, -0.047]
-        // ]).addTo(mymap).bindPopup("I am a polygon.");
-
-
-
-
-
-        function onMapClick(e) {
-          getData(e.latlng)
-          document.getElementById("chartBox").style.visibility = "visible";
-        }
-        mymap.on('click', onMapClick);
-      </script>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-  </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-  </script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
-
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+  </body>
 </html>
