@@ -125,43 +125,28 @@ async function getData(location) {
 }
 
 function updateChart(crimes, location) {
-  Array.prototype.contains = function (v) {
-    for (var i = 0; i < this.length; i++) {
-      if (this[i] === v) return true;
-    }
-    return false;
-  };
+  let counts = {};
+  let data = [];
+  let label = [];
 
+  // to find unique categories of crimes
   Array.prototype.unique = function () {
-    var arr = [];
-    for (var i = 0; i < this.length; i++) {
-      if (!arr.contains(this[i])) {
-        arr.push(this[i]);
-      }
-    }
-    return arr;
+    return this.filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    });
   };
 
-  var counts = {};
-
-  function count(arr) {
+  function countCrimes(arr) {
     for (var i = 0; i < arr.length; i++) {
       var num = arr[i];
       counts[num] = counts[num] ? counts[num] + 1 : 1;
     }
   }
 
-  count(crimes);
-
-  data = [];
+  countCrimes(crimes);
 
   crimes.unique().forEach((element) => {
     data.push(counts[element]);
-  });
-
-  label = [];
-
-  crimes.unique().forEach((element) => {
     label.push(crime_labels[element]);
   });
 

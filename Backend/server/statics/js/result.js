@@ -1,44 +1,11 @@
+var date;
+
 window.onload = function () {
   getDate();
   var ctx = document.getElementById("myChart").getContext("2d");
   window.chart = new Chart(ctx, config);
 };
 
-var config = {
-  type: "doughnut",
-  data: {
-    datasets: [
-      {
-        hoverBorderWidth: 5,
-        borderColor: "rgba(0, 0, 0, 0.1)",
-        data: [0],
-        backgroundColor: ["#2E5BFF", "#8C54FF", "#FAD050", "#00C1D4"],
-        label: "crimes",
-      },
-    ],
-    labels: ["No DATA"],
-  },
-  options: {
-    responsive: true,
-    legend: {
-      position: "right",
-      labels: {
-        fontSize: 12,
-        usePointStyle: true,
-        fontColor: "#20B2AA",
-      },
-    },
-    title: {
-      display: true,
-      text: `24H Crime Prediction for `, // ${location.toString()}
-      fontColor: "#20B2AA",
-    },
-    animation: {
-      animateScale: true,
-      animateRotate: true,
-    },
-  },
-};
 var config = {
   // The type of chart we want to create
   type: "line",
@@ -122,8 +89,6 @@ var config = {
     },
   },
 };
-
-var date;
 
 function handler(e) {
   date = e.target.value;
