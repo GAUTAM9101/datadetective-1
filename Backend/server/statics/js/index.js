@@ -1,4 +1,4 @@
-var crime_labels = ["Larceny", "Burglary", "Assault", "Robbery"];
+var crime_labels = ["Assault", "Burglary", "Larceny", "Robbery"];
 var date;
 var config = {
   type: "doughnut",
@@ -102,24 +102,16 @@ $(document).ready(function () {
     for (let i = 0; i < forcast.length; i++) {
       crimes.push(forcast[i]["Crime"]);
     }
-
-    // to find unique categories of crimes
-    Array.prototype.unique = function () {
-      return this.filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-      });
-    };
-
-    function countCrimes(arr) {
-      for (var i = 0; i < arr.length; i++) {
-        var num = arr[i];
-        counts[num] = counts[num] ? counts[num] + 1 : 1;
-      }
+    // count each categories of crimes
+    for (let i = 0; i < crimes.length; i++) {
+      let crime = crimes[i];
+      counts[crime] = counts[crime] ? counts[crime] + 1 : 1;
     }
 
-    countCrimes(crimes);
+    // to find unique categories of crimes
+    let uniqueCrimes = Array.from(new Set(crimes));
 
-    crimes.unique().forEach((element) => {
+    uniqueCrimes.forEach((element) => {
       data.push(counts[element]);
       label.push(crime_labels[element]);
     });

@@ -61,7 +61,7 @@ var config = {
             min: 0,
             max: 4,
             stepSize: 1,
-            callback: function (label, index, labels) {
+            callback: function (label) {
               switch (label) {
                 case 0:
                   return " Assault";
@@ -138,14 +138,16 @@ function displayData(json) {
   let forcast = json.forcast;
   console.log(forcast);
 
-  let crime_labels = ["Larceny", "Burglary", "Assault", "Robbery"];
+  let crime_labels = ["Assault", "Burglary", "Larceny", "Robbery"];
 
-  const getCrime = (myArray) =>
-    myArray.reduce(
-      (a, b, i, arr) =>
-        arr.filter((v) => v === a).length >= arr.filter((v) => v === b).length
-          ? a
-          : b,
+  // find max occurence of crime
+  const getCrime = (array) =>
+    array.reduce(
+      (acc, next, index, arr) =>
+        arr.filter((val) => val === acc).length >=
+        arr.filter((val) => val === next).length
+          ? acc
+          : next,
       null
     );
 
