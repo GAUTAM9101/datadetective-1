@@ -1,42 +1,5 @@
 var crime_labels = ["Larceny", "Burglary", "Assault", "Robbery"];
 var date;
-
-window.onload = function () {
-  getDate();
-  var ctx = document.getElementById("chart-area").getContext("2d");
-  window.chart = new Chart(ctx, config);
-};
-
-function handler(e) {
-  date = e.target.value;
-}
-
-var mymap = L.map("mapid").setView([42.3145186, -71.1103698], 11);
-L.tileLayer(
-  "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
-  {
-    attribution:
-      'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 20,
-    id: "mapbox/dark-v10",
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken:
-      "pk.eyJ1Ijoiemtlc2FyYW5pIiwiYSI6ImNrZG9vMnVtNDFsMmsyc2w1bmE3Z2g1emcifQ.ftZN_U9my7qqZ7HVDR7LSQ",
-  }
-).addTo(mymap);
-
-L.marker([42.3145186, -71.1103698])
-  .addTo(mymap)
-  .bindPopup("<b>Boston, Massachusetts USA</b>")
-  .openPopup();
-
-function onMapClick(e) {
-  getData(e.latlng);
-  document.getElementById("chartBox").style.visibility = "visible";
-}
-mymap.on("click", onMapClick);
-
 var config = {
   type: "doughnut",
   data: {
@@ -73,89 +36,101 @@ var config = {
   },
 };
 
-function displayData(json, location) {
-  let crimes = [];
-  let forcast = json.forcast;
-  console.log(forcast);
-
-  // For All Day
-  for (let i = 0; i < forcast.length; i++) {
-    crimes.push(forcast[i]["Crime"]);
-  }
-
-  updateChart(crimes, location);
+function handler(e) {
+  date = e.target.value;
 }
 
-function xhrError() {
-  console.error(this.statusText);
-}
+$(document).ready(function () {
+  getDate();
+  var ctx = document.getElementById("chart-area").getContext("2d");
+  window.chart = new Chart(ctx, config);
 
-function getPredictions(data) {
-  return new Promise(function (resolve, reject) {
-    var xhr = new XMLHttpRequest();
-    xhr.onerror = xhrError;
-    var url = "/api/v1/crime_classifier/predict?version=0.2";
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = function () {
-      var status = xhr.status;
-      if (status == 200) {
-        resolve(xhr.response);
-      } else {
-        reject(status);
-      }
-    };
-    xhr.send(data);
-  });
-}
-
-async function getData(location) {
-  latitude = location.lat;
-  longitude = location.lng;
-
-  var data = JSON.stringify({
-    Date: date || getDate(),
-    Lat: latitude,
-    Long: longitude,
-  });
-
-  json = await getPredictions(data);
-  json = JSON.parse(json);
-  displayData(json, location);
-}
-
-function updateChart(crimes, location) {
-  let counts = {};
-  let data = [];
-  let label = [];
-
-  // to find unique categories of crimes
-  Array.prototype.unique = function () {
-    return this.filter(function (value, index, self) {
-      return self.indexOf(value) === index;
-    });
-  };
-
-  function countCrimes(arr) {
-    for (var i = 0; i < arr.length; i++) {
-      var num = arr[i];
-      counts[num] = counts[num] ? counts[num] + 1 : 1;
+  var mymap = L.map("mapid").setView([42.3145186, -71.1103698], 11);
+  L.tileLayer(
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
+    {
+      attribution:
+        'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      maxZoom: 20,
+      id: "mapbox/dark-v10",
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken:
+        "pk.eyJ1Ijoiemtlc2FyYW5pIiwiYSI6ImNrZG9vMnVtNDFsMmsyc2w1bmE3Z2g1emcifQ.ftZN_U9my7qqZ7HVDR7LSQ",
     }
+  ).addTo(mymap);
+
+  L.marker([42.3145186, -71.1103698])
+    .addTo(mymap)
+    .bindPopup("<b>Boston, Massachusetts USA</b>")
+    .openPopup();
+
+  function onMapClick(e) {
+    getData(e.latlng);
+    document.getElementById("chartBox").style.visibility = "visible";
+  }
+  mymap.on("click", onMapClick);
+
+  function getData(location) {
+    let latitude = location.lat;
+    let longitude = location.lng;
+    let currentDate = date || getDate();
+
+    let json = {
+      Date: currentDate,
+      Lat: latitude,
+      Long: longitude,
+    };
+
+    $.post("/api/v1/crime_classifier/predict?version=0.2", json)
+      .then((response) => {
+        displayData(response, location);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   }
 
-  countCrimes(crimes);
+  function displayData(response, location) {
+    let crimes = [];
+    let counts = {};
+    let data = [];
+    let label = [];
+    let forcast = response.forcast;
+    console.log(response);
+    // For All Day
+    for (let i = 0; i < forcast.length; i++) {
+      crimes.push(forcast[i]["Crime"]);
+    }
 
-  crimes.unique().forEach((element) => {
-    data.push(counts[element]);
-    label.push(crime_labels[element]);
-  });
+    // to find unique categories of crimes
+    Array.prototype.unique = function () {
+      return this.filter(function (value, index, self) {
+        return self.indexOf(value) === index;
+      });
+    };
 
-  config.data.datasets[0].data = data;
-  config.data.labels = label;
-  config.options.title.text = `24H Crime Prediction for ${location.toString()}`;
-  document.getElementById("searchbar").value = location.toString();
-  window.chart.update();
-}
+    function countCrimes(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        var num = arr[i];
+        counts[num] = counts[num] ? counts[num] + 1 : 1;
+      }
+    }
+
+    countCrimes(crimes);
+
+    crimes.unique().forEach((element) => {
+      data.push(counts[element]);
+      label.push(crime_labels[element]);
+    });
+
+    config.data.datasets[0].data = data;
+    config.data.labels = label;
+    config.options.title.text = `24H Crime Prediction for ${location.toString()}`;
+    document.getElementById("searchbar").value = location.toString();
+    window.chart.update();
+  }
+});
 
 function getDate() {
   var today = new Date();

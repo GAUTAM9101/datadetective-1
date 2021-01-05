@@ -1,66 +1,72 @@
-body{
-    background-color: #222529;
-    font-family: 'Rubik', sans-serif;
-    color: #20B2AA;
+body {
+  background-color: #222529;
+  font-family: "Rubik", sans-serif;
+  color: #20b2aa;
 }
+
 .bg-dark {
-    background-color: #2D3136!important;
+  background-color: #2d3136 !important;
 }
 
 #searchbar {
-    background-color: #393E44;
-    border-radius: 5px;
-    border: #393E44;
-    color: #BBE1FA;
-    width: 100%;
-    /* box-shadow: 0px 10px 20px rgba(122, 150, 252, 0.07); */
+  background-color: #393e44;
+  border-radius: 5px;
+  border: #393e44;
+  color: #bbe1fa;
+  width: 100%;
+  /* box-shadow: 0px 10px 20px rgba(122, 150, 252, 0.07); */
 }
 
 .card {
-    background: #2D3136;
-    border: 1px solid rgba(46, 91, 255, 0.08);
-    box-sizing: border-box;
-    border-radius: 1px;
-    /* box-shadow: 0px 10px 20px rgba(122, 150, 252, 0.07); */
+  background: #2d3136;
+  border: 1px solid rgba(46, 91, 255, 0.08);
+  box-sizing: border-box;
+  border-radius: 1px;
+  /* box-shadow: 0px 10px 20px rgba(122, 150, 252, 0.07); */
 }
 
 .card-title {
-    font-weight: 200;
+  font-weight: 200;
 }
 
-.title-light{
-    font-weight: 200;
+.title-light {
+  font-weight: 200;
 }
 
 #forcast {
-    background-color: #393E44;
+  background-color: #393e44;
 }
 
 #calender {
-    background-color: #393E44;
-    border: 2px solid #20B2AA;
-    box-sizing: border-box;
-    border-radius: 2px;
-    color: #20B2AA;
+  background-color: #393e44;
+  border: 2px solid #20b2aa;
+  box-sizing: border-box;
+  border-radius: 2px;
+  color: #20b2aa;
 }
 
 input {
-    padding-left: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    display: block;
-    color: #20B2AA;
-  }
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: block;
+  color: #20b2aa;
+}
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-    color: #20B2AA;
-    padding-right: 1rem;
+  color: #20b2aa;
+  padding-right: 1rem;
 }
 
 #chartBox {
-    position: absolute;
-    right: 1%;
-    bottom: 3%;
-    width: auto;
-    z-index: 1;
+  position: absolute;
+  right: 1%;
+  bottom: 3%;
+  width: auto;
+  z-index: 1;
+}
+
+#canvas-holder {
+  width: 100%;
+  height: auto;
 }

@@ -1,11 +1,4 @@
 var date;
-
-window.onload = function () {
-  getDate();
-  var ctx = document.getElementById("myChart").getContext("2d");
-  window.chart = new Chart(ctx, config);
-};
-
 var config = {
   // The type of chart we want to create
   type: "line",
@@ -90,9 +83,43 @@ var config = {
   },
 };
 
+window.onload = function () {
+  getDate();
+  var ctx = document.getElementById("myChart").getContext("2d");
+  window.chart = new Chart(ctx, config);
+};
+
 function handler(e) {
   date = e.target.value;
   initMap();
+}
+
+function initMap() {
+  const geocoder = new google.maps.Geocoder();
+  var address = document.getElementById("address").innerText;
+  geocoder.geocode(
+    {
+      address: address,
+    },
+    callback
+  );
+}
+
+async function callback(results, status) {
+  if (status == google.maps.GeocoderStatus.OK) {
+    latitude = results[0].geometry.location.lat();
+    longitude = results[0].geometry.location.lng();
+
+    var data = JSON.stringify({
+      Date: date || getDate(),
+      Lat: latitude,
+      Long: longitude,
+    });
+
+    json = await getPredictions(data);
+    json = JSON.parse(json);
+    displayData(json);
+  }
 }
 
 function displayData(json) {
@@ -156,7 +183,6 @@ function displayData(json) {
   for (let i = 0; i < 5; i++) {
     overnight_crimes.push(forcast[i]["Crime"]);
   }
-
   overnight_prediction.innerText = crime_labels[getCrime(overnight_crimes)];
 
   window.chart.options.elements.line.tension = 0;
@@ -165,14 +191,10 @@ function displayData(json) {
   window.chart.update();
 }
 
-function xhrError() {
-  console.error(this.statusText);
-}
-
 function getPredictions(data) {
   return new Promise(function (resolve, reject) {
     var xhr = new XMLHttpRequest();
-    xhr.onerror = xhrError;
+    xhr.onerror = () => console.error(this.statusText);
     var url = "/api/v1/crime_classifier/predict?version=0.2";
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -186,34 +208,6 @@ function getPredictions(data) {
     };
     xhr.send(data);
   });
-}
-
-async function callback(results, status) {
-  if (status == google.maps.GeocoderStatus.OK) {
-    latitude = results[0].geometry.location.lat();
-    longitude = results[0].geometry.location.lng();
-
-    var data = JSON.stringify({
-      Date: date || getDate(),
-      Lat: latitude,
-      Long: longitude,
-    });
-
-    json = await getPredictions(data);
-    json = JSON.parse(json);
-    displayData(json);
-  }
-}
-
-function initMap() {
-  const geocoder = new google.maps.Geocoder();
-  var address = document.getElementById("address").innerText;
-  geocoder.geocode(
-    {
-      address: address,
-    },
-    callback
-  );
 }
 
 function getDate() {
